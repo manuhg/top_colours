@@ -50,7 +50,7 @@ def main():
     opf = 'output.json'
   else:
     opf = sys.argv[1]
-  opf = 'output.json'
+  visualize_json(opf)
 
 if __name__=="__main__":
   main()

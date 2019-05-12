@@ -377,7 +377,7 @@ def process_file(input_filename,output_filename='output.json'):
         data.append(dt)
     file.close()
     
-    jsons = list(map(lambda d:get_top_dominant_colours_json(d,,Model),data))
+    jsons = list(map(lambda d:get_top_dominant_colours_json(d,Model),data))
     final_data = {}
     for j in jsons:
       final_data.update({j['id']:j})
