@@ -359,14 +359,16 @@ def get_top_dominant_colours_json(image_data,Model):
   
   return json_data
 
-def process_file(input_filename,output_filename='output.json'):
+def process_file(input_filename,output_dir='output',output_filename='output.json'):
   global web_colours_rgb,colours_tree,replacements
   web_colours_rgb = list(map(unappend_numbers,list(map(lambda v:int(v.replace('#','0x'),0),webcolors.css3_hex_to_names.keys()))))
   colours_tree = spatial.KDTree(web_colours_rgb)
   replacements = {'light':'light ','dark':'dark ','dim':'dark '}
 
   Model = deeplab_init()
-
+  os.popen('mkdir -p '+output_dir).read()
+  output_dir = output_dir+'/' if output_dir[-1]!='/' else output_dir
+  
   try:
     file = open(input_filename,'r')
     data = []
@@ -376,16 +378,17 @@ def process_file(input_filename,output_filename='output.json'):
         dt = dt[1:]
         data.append(dt)
     file.close()
-    
     jsons = list(map(lambda d:get_top_dominant_colours_json(d,Model),data))
     final_data = {}
     for j in jsons:
+      with open(output_dir+j['id']+'.json','w') as f:
+        json.dump(j,f)
       final_data.update({j['id']:j})
     
-    print(final_data)
+    #print(final_data)
     
-    with open(output_filename,'w') as of:
-      json.dump(final_data,of)
+    #with open(output_filename,'w') as of:
+    #  json.dump(final_data,of)
     
   except Exception as e:
     print(e)
@@ -396,11 +399,11 @@ def main():
     return
   
   input_file = sys.argv[1]
-  output_file = 'output.json'
+  output_dir = 'output'
   if len(sys.argv)>2:
-    output_file = sys.argv[2]
+    output_dir = sys.argv[2]
   
-  process_file(input_file,output_file)
+  process_file(input_file,output_dir)
   
 if __name__ == "__main__":
   main()
