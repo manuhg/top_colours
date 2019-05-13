@@ -59,9 +59,9 @@ def main():
     key = cv2.waitKey(0)
     if key == 27:
       break
-    elif key == ord('<'):
+    elif key == ord(','):
       i = i+1
-    elif key == ord('>'):
+    elif key == ord('.'):
       i = i-1
     i = 0 if i<0 else i
   cv2.destroyAllWindows()
